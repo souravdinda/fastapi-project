@@ -181,3 +181,13 @@ Common additions:
 - **Separate plan/apply jobs** — plan on PR, apply only on merge to `main`
 - **Remote state** — use an S3 backend + DynamoDB lock table so state is shared across team members and CI runs
 - **Slack notification** — use `slackapi/slack-github-action` to notify on success/failure
+
+---
+
+## Destroy Workflow (`destroy.yml`)
+
+The repository also includes a manual workflow to tear down the infrastructure.
+
+**Trigger:** `workflow_dispatch` (Manual via GitHub Actions UI)
+
+It requires you to type "DESTROY" in an input prompt before running to prevent accidental clicks. It authenticates with the same AWS credentials and runs `terraform destroy -auto-approve`.

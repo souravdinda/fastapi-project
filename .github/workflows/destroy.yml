@@ -1,24 +1,26 @@
-name: Deploy Hello World
+name: Destroy Infrastructure
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "DESTROY" to confirm you want to delete all AWS resources'
+        required: true
+        type: string
 
 env:
   AWS_REGION: us-east-1
   TF_WORKING_DIR: terraform
 
 jobs:
-  deploy:
-    name: Terraform Deploy
+  destroy:
+    name: Terraform Destroy
     runs-on: ubuntu-latest
+    if: inputs.confirm == 'DESTROY'
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -36,18 +38,8 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform init
 
-      - name: Terraform Validate
+      - name: Terraform Destroy
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform validate
-
-      - name: Terraform Plan
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform plan -out=tfplan
-
-      - name: Terraform Apply
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform apply -auto-approve tfplan
-
-      - name: Output API URL
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform output api_url
+        run: |
+          terraform destroy 
+            -auto-approve
