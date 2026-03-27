@@ -4,12 +4,6 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "aws_profile" {
-  description = "AWS CLI named profile to use for authentication"
-  type        = string
-  default     = "joel"
-}
-
 variable "project_name" {
   description = "Prefix for all resource names"
   type        = string

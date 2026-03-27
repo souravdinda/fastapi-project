@@ -17,24 +17,18 @@ terraform {
     key          = "joel-hello/terraform.tfstate"
     region       = "us-east-1"
     use_lockfile = true
-    profile      = "joel"
   }
 }
 
 provider "aws" {
   region  = var.aws_region
-  profile = var.aws_profile
 }
-
-# ── Package the Lambda source ──────────────────────────────────────────────────
 
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "${path.module}/../src"
   output_path = "${path.module}/../build/lambda.zip"
 }
-
-# ── IAM role for Lambda ────────────────────────────────────────────────────────
 
 resource "aws_iam_role" "lambda_exec" {
   name = "${var.project_name}-lambda-exec"
@@ -54,8 +48,6 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# ── Lambda function ────────────────────────────────────────────────────────────
-
 resource "aws_lambda_function" "hello_world" {
   function_name    = "${var.project_name}-hello-world"
   role             = aws_iam_role.lambda_exec.arn
@@ -66,8 +58,6 @@ resource "aws_lambda_function" "hello_world" {
 
   tags = var.tags
 }
-
-# ── API Gateway (HTTP API) ─────────────────────────────────────────────────────
 
 resource "aws_apigatewayv2_api" "hello_world" {
   name          = "${var.project_name}-api"
