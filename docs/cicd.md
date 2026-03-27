@@ -96,10 +96,10 @@ The IAM user should have permissions to manage Lambda, API Gateway, EC2, ALB, IA
 - name: Setup Terraform
   uses: hashicorp/setup-terraform@v3
   with:
-    terraform_version: "1.7.5"
+    terraform_version: "1.10.5"
 ```
 
-Installs the specified Terraform version on the runner. Pinning to `"1.7.5"` ensures the pipeline uses a known-good version and doesn't break if HashiCorp releases a new version with breaking changes.
+Installs the specified Terraform version on the runner. Pinning to `"1.10.5"` ensures the pipeline uses a known-good version supporting S3 native state locking.
 
 ---
 

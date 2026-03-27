@@ -19,7 +19,7 @@ This file is the primary Terraform configuration. It sets up:
 
 ```hcl
 terraform {
-  required_version = ">= 1.3.0"
+  required_version = ">= 1.10.0"
 
   required_providers {
     aws = {
@@ -33,17 +33,18 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "demo1bucket90"
-    key    = "joel-hello/terraform.tfstate"
-    region = "us-east-1"
+    bucket       = "demo1bucket90"
+    key          = "joel-hello/terraform.tfstate"
+    region       = "us-east-1"
+    use_lockfile = true
   }
 }
 ```
 
-- **`required_version`** — enforces Terraform CLI ≥ 1.3.0 to use features like `optional()` type constraints
+- **`required_version`** — enforces Terraform CLI ≥ 1.10.0 to support S3 native state locking via `use_lockfile = true`
 - **`hashicorp/aws ~> 5.0`** — allows any `5.x` patch version; prevents accidental major-version upgrades
 - **`hashicorp/archive`** — used to ZIP local files (the Lambda source) without external tooling
-- **`backend "s3"`** — stores the state securely in the `demo1bucket90` S3 bucket. Allows multiple developers/CI to work on the same infrastructure without state conflicts.
+- **`backend "s3"`** — stores the state securely in the `demo1bucket90` S3 bucket. `use_lockfile = true` enables native S3 state locking (no DynamoDB table required!), preventing concurrent deploy conflicts.
 
 ---
 
