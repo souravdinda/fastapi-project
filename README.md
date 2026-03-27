@@ -2,6 +2,8 @@
 
 A minimal "Hello World" HTTP app deployed on AWS using **API Gateway v2 (HTTP API)** and **Lambda (Python 3.12)**, with infrastructure managed by **Terraform** and CI/CD via **GitHub Actions**.
 
+State is stored in an **S3 remote backend** (`demo1bucket90`).
+
 ---
 
 ## Project Structure

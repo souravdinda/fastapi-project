@@ -31,12 +31,19 @@ terraform {
       version = "~> 2.0"
     }
   }
+
+  backend "s3" {
+    bucket = "demo1bucket90"
+    key    = "joel-hello/terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 ```
 
 - **`required_version`** — enforces Terraform CLI ≥ 1.3.0 to use features like `optional()` type constraints
 - **`hashicorp/aws ~> 5.0`** — allows any `5.x` patch version; prevents accidental major-version upgrades
 - **`hashicorp/archive`** — used to ZIP local files (the Lambda source) without external tooling
+- **`backend "s3"`** — stores the state securely in the `demo1bucket90` S3 bucket. Allows multiple developers/CI to work on the same infrastructure without state conflicts.
 
 ---
 
